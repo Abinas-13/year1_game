@@ -11,9 +11,9 @@ SET(OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin/")
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${OUTPUT_DIRECTORY})
 
 #### Add External Dependencies ####
-add_subdirectory("lib/SFML")
-set(SFML_INCS "lib/SFML/include")
-link_directories("${CMAKE_BINARY_DIR}/lib/SFML/lib")
+add_subdirectory("${CMAKE_SOURCE_DIR}/lib/SFML" "${CMAKE_BINARY_DIR}/SFML_build")
+set(SFML_INCS "${CMAKE_SOURCE_DIR}/lib/SFML/include")
+link_directories("${CMAKE_SOURCE_DIR}/lib/SFML/lib")
 
 #### Practical 1 ####
 add_executable(pong main.cpp)
@@ -23,9 +23,9 @@ set_target_properties(pong
     PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY
     ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$(Configuration)
 )
-add_custom_target(copy_resources ALL COMMAND ${CMAKE_COMMAND} 
-  -E copy_directory
-    "${PROJECT_SOURCE_DIR}/resources"
-    ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/$<CONFIGURATION>/resources
+add_custom_target(copy_resources ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_SOURCE_DIR}/resources"
+        "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/resources"
 )
 add_dependencies(pong copy_resources)
